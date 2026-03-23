@@ -1,0 +1,33 @@
+CREATE EXTENSION IF NOT EXISTS postgis;
+
+CREATE TABLE IF NOT EXISTS events (
+  id UUID PRIMARY KEY,
+  title TEXT NOT NULL,
+  country TEXT NOT NULL,
+  lat DOUBLE PRECISION NOT NULL,
+  lon DOUBLE PRECISION NOT NULL,
+  geom GEOGRAPHY(Point, 4326) NOT NULL,
+  type TEXT NOT NULL,
+  weight INT NOT NULL,
+  confidence DOUBLE PRECISION NOT NULL DEFAULT 0.6,
+  date TIMESTAMPTZ NOT NULL,
+  source TEXT NOT NULL DEFAULT 'gdelt',
+  external_id TEXT NOT NULL,
+  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  UNIQUE (source, external_id)
+);
+
+ALTER TABLE events ADD COLUMN IF NOT EXISTS confidence DOUBLE PRECISION NOT NULL DEFAULT 0.6;
+ALTER TABLE events ADD COLUMN IF NOT EXISTS source TEXT NOT NULL DEFAULT 'gdelt';
+
+CREATE INDEX IF NOT EXISTS idx_events_date ON events (date DESC);
+CREATE INDEX IF NOT EXISTS idx_events_country ON events (country);
+CREATE INDEX IF NOT EXISTS idx_events_type ON events (type);
+CREATE INDEX IF NOT EXISTS idx_events_geom ON events USING GIST (geom);
+CREATE INDEX IF NOT EXISTS idx_events_source ON events (source);
+
+CREATE TABLE IF NOT EXISTS country_scores (
+  country TEXT PRIMARY KEY,
+  score DOUBLE PRECISION NOT NULL,
+  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);

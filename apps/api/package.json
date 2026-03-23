@@ -1,0 +1,20 @@
+{
+  "name": "@gtm/api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env --watch src/index.js",
+    "start": "node --env-file-if-exists=.env src/index.js",
+    "test": "node --test",
+    "ingest:gdelt": "node --env-file-if-exists=.env src/workers/ingestGdelt.js",
+    "ingest:acled": "node --env-file-if-exists=.env src/workers/ingestAcled.js",
+    "ingest:news": "node --env-file-if-exists=.env src/workers/ingestNews.js",
+    "ingest:all": "node --env-file-if-exists=.env src/workers/ingestAllSources.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "pg": "^8.20.0"
+  }
+}

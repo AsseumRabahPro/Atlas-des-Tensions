@@ -1,0 +1,19 @@
+{
+  "name": "global-tension-map",
+  "private": true,
+  "version": "0.1.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "scripts": {
+    "web": "next dev apps/web",
+    "dev": "concurrently \"npm --prefix apps/api run dev\" \"npm --prefix apps/web run dev\"",
+    "dev:web": "next dev apps/web",
+    "dev:api": "npm --prefix apps/api run dev",
+    "dev:mobile": "npm --prefix apps/mobile run start",
+    "build:web": "npm --prefix apps/web run build"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  }
+}
