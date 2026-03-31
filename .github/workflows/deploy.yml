@@ -6,6 +6,10 @@ on:
     branches: [main]
     types: [completed]
 
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAMESPACE: ghcr.io/asseumrabahpro/atlas-des-tensions
+
 jobs:
   build-and-push:
     name: Build & push Docker images
@@ -19,6 +23,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v3
@@ -33,26 +39,26 @@ jobs:
       - name: Build & push API image
         uses: docker/build-push-action@v5
         with:
-          context: apps/api
+          context: .
           file: apps/api/Dockerfile
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            ghcr.io/${{ github.repository }}/api:latest
-            ghcr.io/${{ github.repository }}/api:${{ github.sha }}
+            ${{ env.IMAGE_NAMESPACE }}/api:latest
+            ${{ env.IMAGE_NAMESPACE }}/api:${{ github.event.workflow_run.head_sha }}
 
       - name: Build & push Web image
         uses: docker/build-push-action@v5
         with:
-          context: apps/web
+          context: .
           file: apps/web/Dockerfile
           push: true
           cache-from: type=gha
           cache-to: type=gha,mode=max
           tags: |
-            ghcr.io/${{ github.repository }}/web:latest
-            ghcr.io/${{ github.repository }}/web:${{ github.sha }}
+            ${{ env.IMAGE_NAMESPACE }}/web:latest
+            ${{ env.IMAGE_NAMESPACE }}/web:${{ github.event.workflow_run.head_sha }}
 
   # ── Optional: deploy to a VPS via SSH ──────────────────────────────────────
   # Uncomment and configure once you have a server.
