@@ -22,7 +22,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm --prefix apps/api test
+        run: npm run test --workspace @gtm/api
 
   web-build:
     name: Web – Build check
@@ -39,4 +39,4 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm --prefix apps/web run build
+        run: npm run build --workspace @gtm/web
