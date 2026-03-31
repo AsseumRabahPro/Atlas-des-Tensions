@@ -52,7 +52,7 @@ export async function geocodeLocation(city, country) {
   });
 
   if (!response.ok) {
-    return countryFallback(normalizedCountry);
+    return null;
   }
 
   const results = await response.json();
